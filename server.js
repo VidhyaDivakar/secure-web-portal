@@ -26,6 +26,8 @@ mongoose.connect(process.env.MONGO_URI)
 // routes
 app.use("/api/users", authRoutes);
 
+app.use("/api/bookmarks", bookmarkRoutes);
+
 
 // port
 const PORT = process.env.PORT || 3005;

@@ -118,4 +118,49 @@ router.get("/me", authMiddleware, async (req, res) => {
     }
 });
 
+// github login route
+router.get(
+    "/auth/github",
+
+    passport.authenticate("github", {
+        scope: ["user:email"]
+    })
+);
+
+// github Callback route
+router.get(
+    "/auth/github/callback",
+
+    passport.authenticate("github", {
+        session: false,
+        failureRedirect: "/login"
+    }),
+
+    async (req, res) => {
+
+        try {
+
+            // create JWT
+            const token = signToken(req.user);
+
+            // send token back
+            res.json({
+                message: "GitHub login successful",
+                token,
+                user: {
+                    _id: req.user._id,
+                    username: req.user.username,
+                    email: req.user.email
+                }
+            });
+
+        } catch (error) {
+
+            res.status(500).json({
+                message: "Server Error"
+            });
+        }
+    }
+);
+
 module.exports = router;
