@@ -1,3 +1,4 @@
+
 const express = require("express");
 
 const router = express.Router();
@@ -9,7 +10,7 @@ const User = require("../models/User");
 
 const { signToken, authMiddleware } = require("../utils/auth");
 
-
+console.log("Auth Routes Loaded");
 // REGISTER
 router.post("/register", async (req, res) => {
 
@@ -144,6 +145,8 @@ router.get(
 
             // create JWT
             const token = signToken(req.user);
+            console.log("callback is hit");
+        console.log("User from github:", req.user);
 
             // send token back
             res.json({

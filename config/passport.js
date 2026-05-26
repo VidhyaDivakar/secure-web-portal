@@ -7,19 +7,19 @@ const User = require("../models/User");
 passport.use(
     new GitHubStrategy(
         {
-            clientID: process.env.GITHUB_CLIENT_ID,
-
-            clientSecret: process.env.GITHUB_CLIENT_SECRET,
-
-            callbackURL: process.env.GITHUB_CALLBACK_URL
+            clientID: process.env.GITHUB_CLIENT_ID?.trim(),
+            clientSecret: process.env.GITHUB_CLIENT_SECRET?.trim(),
+            callbackURL: process.env.GITHUB_CALLBACK_URL?.trim()
         },
 
         async (accessToken, refreshToken, profile, done) => {
 
             try {
 
-                // GitHub email
-                const email = profile.emails[0].value;
+                // GitHub email (safe): some GitHub profiles don't expose emails
+                const email = (profile.emails && profile.emails.length && profile.emails[0].value)
+                    || (profile._json && profile._json.email)
+                    || `${profile.username}@users.noreply.github.com`;
 
                 // Check if user already exists
                 let user = await User.findOne({ email });

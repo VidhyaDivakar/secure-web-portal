@@ -11,6 +11,9 @@ const passport = require("./config/passport");
 const authRoutes = require("./routes/authRoutes");
 const bookmarkRoutes = require("./routes/bookmarkRoutes");
 
+console.log("GitHub Client ID:", process.env.GITHUB_CLIENT_ID?.trim());
+console.log("GitHub Callback URL:", process.env.GITHUB_CALLBACK_URL?.trim());
+
 const app = express();
 
 
@@ -27,10 +30,15 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 // routes
-app.use("/api/users", authRoutes);
+app.use("/api", authRoutes);
 
 app.use("/api/bookmarks", bookmarkRoutes);
 
+// global debug
+app.use((req, res, next) => {
+    console.log("REQUEST:", req.method, req.url);
+    next();
+});
 
 // port
 const PORT = process.env.PORT || 3005;

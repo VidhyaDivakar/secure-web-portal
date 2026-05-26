@@ -16,11 +16,11 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
-        minlength: 8, // optional for github users
+        required: function () { return !this.githubId; },
+        minlength: 8, // required only for local users
     },
-      githubId: {
-        type: String
+    githubId: {
+        type: String,
         // optional for local users
     }
 });
