@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 
 const User = require("../models/User");
 
@@ -45,9 +46,10 @@ router.post("/register", async (req, res) => {
         });
 
     } catch (error) {
-
+        console.log("FULL ERROR:", error);
         res.status(500).json({
-            message: "Server Error"
+            message: "Server Error",
+            error: error.message
         });
     }
 });

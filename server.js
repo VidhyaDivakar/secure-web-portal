@@ -1,3 +1,5 @@
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 require("dotenv").config();
 
 const express = require("express");
@@ -7,6 +9,7 @@ const mongoose = require("mongoose");
 const passport = require("./config/passport");
 
 const authRoutes = require("./routes/authRoutes");
+const bookmarkRoutes = require("./routes/bookmarkRoutes");
 
 const app = express();
 
