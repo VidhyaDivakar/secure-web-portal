@@ -6,8 +6,6 @@ const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
-        unique: true,
         trim: true,
     },
     email: {
@@ -19,20 +17,25 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 8,
+        minlength: 8, // optional for github users
     },
-});
-//hashing password
-// use a pre('save') hook, which tells Mongoose to run our function before any User document is saved.
-userSchema.pre("save", async function (next) {
-    if (this.isNew || this.isModified("password")) {
-        const bcrypt = require("bcrypt");
-        const saltRounds = 10;
-        this.password = await bcrypt.hash(this.password, saltRounds);
+      githubId: {
+        type: String
+        // optional for local users
     }
-
 });
 
-const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+// //hashing password
+// // use a pre('save') hook, which tells Mongoose to run our function before any User document is saved.
+// userSchema.pre("save", async function (next) {
+//     if (this.isNew || this.isModified("password")) {
+//         const bcrypt = require("bcrypt");
+//         const saltRounds = 10;
+//         this.password = await bcrypt.hash(this.password, saltRounds);
+//     }
+
+// });
+
+module.exports = mongoose.model("User", userSchema);
+
